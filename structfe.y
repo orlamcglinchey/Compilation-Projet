@@ -1,4 +1,6 @@
-%token IDENTIFIER CONSTANT SIZEOF
+%token <name> IDENTIFIER
+%token <number> CONSTANT
+%token SIZEOF
 %token PTR_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP
 %token EXTERN
@@ -6,13 +8,19 @@
 %token STRUCT 
 %token IF ELSE WHILE FOR RETURN
 
+%type <str> primary_expression
 %start program
 %%
 
+%union{
+  char *str;
+ 
+ }
+
 primary_expression
-        : IDENTIFIER
-        | CONSTANT
-        | '(' expression ')'
+: IDENTIFIER {$$=$1;}
+| CONSTANT { $$=$1;}
+| '(' expression ')' {$$=$2;}
         ;
 
 postfix_expression

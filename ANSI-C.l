@@ -29,16 +29,9 @@ IS                      (u|U|l|L)*
 "void"                  { return VOID; }
 "while"                 { return WHILE; }
 
-{L}({L}|{D})*           { return IDENTIFIER; }
+{L}({L}|{D})*           {yylval.str=strdup(yytext); return IDENTIFIER; }
+{D}+                    {yylval.str = strdup(yytext); return CONSTANT;}
 
-0[xX]{H}+{IS}?          { /* hex integer constants*/ return CONSTANT; }
-0{D}+{IS}?              { /* octal integers */ return CONSTANT; }
-{D}+{IS}?               { /* dec integers*/ return CONSTANT; }
-L?'(\\.|[^\\'])+'       { /* A completer */ return CONSTANT;}
-
-{D}+{E}{FS}?            { return CONSTANT;} /*not sure if we need to account for all these cases*/
-{D}*"."{D}+({E})?{FS}?  {  return CONSTANT; }
-{D}+"."{D}*({E})?{FS}?  { return CONSTANT;}
 
 L?\"(\\.|[^\\"])*\"     { /* A completer */ }
 
